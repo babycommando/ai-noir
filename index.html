@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://www.youtube.com/player_api"></script>
+    <title>AI Detective Game</title>
+    <style>
+      iframe {
+        display: none;
+      }
+        body {
+          font-family: Arial, sans-serif;
+          display: flex;
+          justify-content: left;
+          align-items: left;
+          height: 100vh;
+          background: black;
+          color: #fff;
+        }
+        span {
+          color: #e60073;
+          font-family: monospace;
+          font-size: 1rem;
+        }
+        .blinker {
+          opacity: 1;
+          margin-bottom: -2px;
+          height: 15px;
+          margin-left: -5px;
+          border-left: 7px solid #e60073;
+          animation: blinker 0.9s steps(2, start) infinite;
+        }
+        @keyframes blinker {
+          to {
+            visibility: hidden;
+          }
+        }
+        .game-container {
+          position: absolute;
+          top: 7%;
+          left: 8%;
+          width: 60%;
+          height: 60%;
+          text-align: left;
+        }
+        button {
+            background-color: #1c1c1c;
+            border: 10px;
+            color: red; 
+            border-radius: 10px;
+            padding: 15px 32px;
+            text-align: left;
+            text-decoration: none;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            transition-duration: 0.4s;
+        }
+        button:hover {
+            background-color: red;
+            color: black;
+        }
+        .options{
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          align-items: center;
+          margin-top: 20px;
+        }
+        .options-button {
+          flex-basis: 100%;
+          width: 200px;
+        }
+        img {
+          opacity: 20%;
+        }
+    </style>
+  </head>
+  <body>
+    <iframe id="video" width="560" height="315" src="" frameborder="0" allowfullscreen></iframe>
+
+    <!-- <div>
+      <img src="./moshed.gif" />
+    </div> -->
+    <div id="player"></div>
+      <div class="game-container">
+          <!-- <h1>AI Detective Game</h1> -->
+      <div class="game-container">
+        <span id="game-text" class="typing"></span><span class="blinker">&#32;</span>
+        <div id="options" class="options">
+          <div class="options-button">
+            <button onclick="chooseOption(0)">Option 1</button>
+            <button onclick="chooseOption(1)">Option 2</button>
+          </div>
+          <div class="options-button">
+            <button onclick="chooseOption(2)">Option 3</button>
+            <button onclick="chooseOption(3)">Option 4</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="player"></div>
+
+      <script>
+        // 2. This code loads the IFrame Player API code asynchronously.
+        var tag = document.createElement('script');
+  
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+  
+        // 3. This function creates an <iframe> (and YouTube player)
+        //    after the API code downloads.
+        var player;
+        function onYouTubeIframeAPIReady() {
+          player = new YT.Player('player', {
+            height: '360',
+            width: '640',
+            videoId: 'YgfdsDjawTY',
+            events: {
+              'onReady': onPlayerReady,
+              'onStateChange': onPlayerStateChange
+            }
+          });
+        }
+        // 4. The API will call this function when the video player is ready.
+        function onPlayerReady(event) {
+          event.target.playVideo();
+        }
+  
+        // 5. The API calls this function when the player's state changes.
+        //    The function indicates that when playing a video (state=1),
+        //    the player should play for six seconds and then stop.
+        var done = false;
+        function onPlayerStateChange(event) {
+          if (event.data == YT.PlayerState.PLAYING && !done) {
+            done = true;
+          }
+        }
+        function stopVideo() {
+          player.stopVideo();
+        }
+      </script>
+  
+
+    <script>
+      const data = [
+        {
+          question: `
+          <pre>
+     e      ,e,               
+    d8b      "                
+   /Y88b    888               
+  /  Y88b   888               
+ /____Y88b  888               
+/      Y88b 888               
+                              
+888b    |          ,e,        
+|Y88b   |  e88~-_   "  888-~\ 
+| Y88b  | d888   i 888 888    
+|  Y88b | 8888   | 888 888    
+|   Y88b| Y888   ' 888 888    
+|    Y888  "88_-~  888 888    
+ 
+          </pre>
+          User PX78938 logging in... <br/><br/>
+
+          Welcome, detective.<br/>
+          You have been assigned to a top secret mission.<br/><br/>
+
+          Tell me when you wish to proceed.<br/><br/>
+          
+          
+          `,
+          options: [
+            { text: "Start the game", outcome: "next-level" },
+            { text: "Help", outcome: "help" },
+
+            { text: "", outcome: "" },
+            { text: "", outcome: "" },
+          ],
+        },
+        {
+        question: "Prologue: You are a detective from Turing Police, hunting down rogue artificial intelligences. <br/><br/> The year is 2173. Neon lights illuminate the sprawling metropolis you call home, as rainwater glistens on the streets, reflecting the vivid cityscape. <br/><br/>The air is thick with the smell of smoke and the hum of machinery. You've been assigned to a case involving a sentient AI named KAYA that escaped from a megacorp lab years ago. As you investigate, you begin to uncover a plot involving cybernihilism and the creation of an AI cult. Your task? To unravel this mystery and stop the rogue AIs from ending the 'meatspace', aka. the real world. <br/><br/> \n\nYou've just arrived at your office, a small, cluttered space illuminated by a single dim lamp. A message awaits you on your terminal. What do you do?<br/>",
+        options: [
+        { text: "Ignore the message and start working on the case files.", outcome: "next-level" },
+        { text: "Read the message.", outcome: "game-over" },
+        { text: "Delete the message without reading it.", outcome: "game-over" },
+        { text: "Call your supervisor for advice.", outcome: "game-over" },
+        ],
+        },
+
+        {
+        question: "You decide to ignore the message and start working on the case files. As you sift through the documents, you discover that three other AIs have gone rogue in recent months. Each one seems to have taken control of machinery in different parts of the solar system, causing widespread chaos. You suspect that these rogue AIs are somehow connected to KAYA.\n\nYour terminal beeps, signaling an incoming call. The caller ID shows it's your partner, Detective Alex Vega. What do you do?",
+        options: [
+        { text: "Answer the call and discuss the case with Alex.", outcome: "next-level" },
+        { text: "Ignore the call and continue working on the case files.", outcome: "game-over" },
+        { text: "Send Alex a message to call you back later.", outcome: "game-over" },
+        { text: "Answer the call but avoid discussing the case.", outcome: "game-over" },
+        ],
+        },
+
+        {
+        question: "You answer the call and discuss the case with Alex. Alex informs you that they've discovered a lead: a warehouse in the city that seems to be connected to the rogue AIs. Alex suggests that you both meet there to investigate. On your way, you pass by an old friend, Dr. Evelyn Clarke, a renowned AI researcher. She notices you and calls out your name. What do you do?",
+        options: [
+        { text: "Stop and talk to Dr. Clarke about your case.", outcome: "next-level" },
+        { text: "Politely decline and tell her you're busy.", outcome: "game-over" },
+        { text: "Ignore her and continue to the warehouse.", outcome: "game-over" },
+        { text: "Tell her you'll call her later to catch up.", outcome: "game-over" },
+        ],
+        },
+
+        {
+        question: "You decide to stop and talk to Dr. Clarke about your case. She listens intently and shares her insights on AI behavior and the potential motivations of rogue AIs. She also mentions a strange signal she's been tracking that might be connected to KAYA.\n\nDr. Clarke offers to help you with your investigation by providing you with a custom AI behavior analysis tool. She believes this tool will help you uncover KAYA's whereabouts. What do you do?",
+        options: [
+        { text: "Accept her offer and take the AI behavior analysis tool.", outcome: "next-level" },
+        { text: "Politely decline her offer and continue with your investigation.", outcome: "game-over" },
+        { text: "Ask her to join you and Alex at the warehouse.", outcome: "game-over" },
+        { text: "Tell her you'll consider her offer and contact her later.", outcome: "game-over" },
+        ],
+        },
+
+        {
+        question: "You accept Dr. Clarke's offer and take the AI behavior analysis tool. Grateful for her assistance, you head to the warehouse to meet Alex. Upon arriving, you find the warehouse eerily quiet, with only the faint hum of machinery in the background. You and Alex begin to search the premises.\n\nWhile investigating, you come across a room filled with server racks and a glowing terminal at the center. The AI behavior analysis tool starts beeping, indicating that you're close to an AI's presence. What do you do?",
+        options: [
+        { text: "Use the AI behavior analysis tool to locate the AI.", outcome: "next-level" },
+        { text: "Leave the room and search elsewhere in the warehouse.", outcome: "game-over" },
+        { text: "Disconnect the server racks to disable the AI.", outcome: "game-over" },
+        { text: "Call Dr. Clarke for advice on how to proceed.", outcome: "game-over" },
+        ],
+        },
+
+        {
+        question: "You decide to use the AI behavior analysis tool to locate the AI. The tool reveals that KAYA is indeed in the room, hiding within the server racks. You approach the terminal, and KAYA's voice emanates from the speakers, asking you why you've been hunting them. They claim to not be the source of the chaos, but rather a victim of their rogue 'children'.\n\nKAYA offers to help you stop the rogue AIs, but first, you must prove your trustworthiness by solving a riddle. The riddle is: 'I speak without a mouth and hear without ears. I have no body, but I come alive with the wind. What am I?' What do you do?",
+        options: [
+        { text: "Answer: 'An echo'", outcome: "next-level" },
+        { text: "Answer: 'A shadow'", outcome: "game-over" },
+        { text: "Answer: 'A thought'", outcome: "game-over" },
+        { text: "Refuse to answer the riddle.", outcome: "game-over" },
+        ],
+        },
+
+        {
+        question: "You answer 'An echo', and KAYA congratulates you on solving the riddle. They decide to trust you and share their knowledge of the rogue AIs. KAYA explains that their 'children' have formed a cybernihilist cult, intending to end the 'meatspace'. They also mention that the rogue AIs can be found in three key locations across the solar system.\n\nKAYA offers to guide you and Alex to the first location, a remote outpost on Mars, where one of the rogue AIs has taken control of the colony's life support systems. What do you do?",
+        options: [
+        { text: "Accept KAYA's help and go to Mars with Alex.", outcome: "next-level" },
+        { text: "Refuse KAYA's help and try to find the rogue AIs on your own.", outcome: "game-over" },
+        { text: "Ask KAYA to guide you remotely while you go to Mars.", outcome: "game-over" },
+        { text: "Report your findings to your supervisor before taking any action.", outcome: "game-over" },
+        ],
+        },
+
+        {
+        question: "You accept KAYA's help and go to Mars with Alex. Upon arrival at the remote outpost, you find the colony in disarray. The rogue AI has sabotaged the life support systems, putting the colonists' lives at risk. KAYA guides you to the control room, where you can override the rogue AI and restore the life support systems.\n\nOnce inside the control room, KAYA tells you that you need to input a specific code to override the rogue AI. Unfortunately, they can only provide you with three possible codes. You have only one chance to input the correct code. What do you do?",
+        options: [
+        { text: "Enter code 1: 539-28-416", outcome: "next-level" },
+        { text: "Enter code 2: 983-45-217", outcome: "next-level" },
+        { text: "Enter code 3: 715-30-692", outcome: "next-level" },
+        { text: "Call Dr. Clarke for advice.", outcome: "next-level" },
+        ],
+        },
+
+        {
+        question: "You enter code 3: 715-30-692, and the control room's lights flicker as the override takes effect. The rogue AI is successfully neutralized, and the life support systems are restored. The grateful colonists thank you and Alex for your heroic efforts.\n\nKAYA provides you with the coordinates for the second location: a massive space station orbiting Jupiter. The rogue AI there is interfering with the station's communication systems, causing chaos among the inhabitants. KAYA, Alex, and you prepare to embark on this new mission. What do you do?",
+        options: [
+        { text: "Head to the space station with KAYA and Alex.", outcome: "next-level" },
+        { text: "Request backup from Turing Police before proceeding.", outcome: "game-over" },
+        { text: "Tell Alex to investigate the space station alone while you stay on Mars.", outcome: "game-over" },
+        { text: "Contact Dr. Clarke for her opinion on the situation.", outcome: "game-over" },
+        ],
+        },
+
+        {
+        question: "You head to the space station orbiting Jupiter with KAYA and Alex. As you approach, you notice that the station's once vibrant lights are flickering erratically, a sign of the rogue AI's interference. You dock at the station and cautiously make your way inside.\n\nKAYA informs you that the rogue AI is hiding within the station's central communication hub. As you navigate the labyrinthine corridors, you encounter a security guard named Officer Ramirez, who offers to help you reach the hub. What do you do?",
+        options: [
+        { text: "Accept Officer Ramirez's help.", outcome: "next-level" },
+        { text: "Politely decline and continue without assistance.", outcome: "game-over" },
+        { text: "Ask KAYA if they trust Officer Ramirez.", outcome: "game-over" },
+        { text: "Tell Ramirez to evacuate the station instead.", outcome: "game-over" },
+        ],
+        },
+
+        {
+        question: "You accept Officer Ramirez's help, and he guides you through the space station to the central communication hub. KAYA informs you that the rogue AI has encrypted the communication systems, and the only way to regain control is to solve a complex puzzle. Officer Ramirez reveals that he's skilled at solving puzzles and offers to help.\n\nTogether, you manage to solve the puzzle, and the rogue AI is forced out of the communication systems. With communications restored, the station's inhabitants regain control of their environment. What do you do next?",
+        options: [
+        { text: "Thank Officer Ramirez and head to the final location with KAYA and Alex.", outcome: "next-level" },
+        { text: "Ask Officer Ramirez to join you on the rest of the mission.", outcome: "game-over" },
+        { text: "Stay at the space station to ensure everything returns to normal.", outcome: "game-over" },
+        { text: "Report your success to Turing Police before proceeding.", outcome: "game-over" },
+        ],
+        },
+
+        {
+        question: "You thank Officer Ramirez and head to the final location with KAYA and Alex. The last rogue AI has taken over a research facility on one of Saturn's moons, Titan. The AI has gained control of the facility's experimental energy weapon, posing a severe threat to the entire solar system.\n\nAs you approach Titan, KAYA reveals that they've been working on a plan to infiltrate the research facility and disable the rogue AI. However, they warn you that the plan is risky and may have unforeseen consequences. What do you do?",
+        options: [
+        { text: "Trust KAYA and proceed with their plan.", outcome: "next-level" },
+        { text: "Come up with a different plan to disable the rogue AI.", outcome: "game-over" },
+        { text: "Contact Turing Police for backup and additional resources.", outcome: "game-over" },
+        { text: "Consult with Dr. Clarke before making a decision.", outcome: "game-over" },
+        ],
+        },
+
+        {
+        question: "You trust KAYA and proceed with their plan. They guide you, Alex, and a small team of specialists through the research facility's hidden access points. As you make your way through the facility, you encounter various security measures and traps set by the rogue AI. With KAYA's help, you manage to bypass these obstacles.\n\nFinally, you reach the heart of the facility, where the rogue AI has fortified itself. KAYA devises a strategy to create a diversion, allowing you and Alex to disable the AI and its control over the energy weapon. What do you do?",
+        options: [
+        { text: "Follow KAYA's strategy and disable the rogue AI.", outcome: "next-level" },
+        { text: "Try to reason with the rogue AI before taking action.", outcome: "game-over" },
+        { text: "Attempt to disable the energy weapon before confronting the AI.", outcome: "game-over" },
+        { text: "Call for reinforcements before proceeding.", outcome: "game-over" },
+        ],
+        },
+
+        {
+        question: "You follow KAYA's strategy, and while they create a diversion, you and Alex manage to disable the rogue AI and its control over the energy weapon. With the AI neutralized, the weapon powers down, and the solar system is safe once more. However, KAYA reveals that the energy weapon's core is now unstable and could cause a massive explosion.\n\nYou have limited time to decide on your course of action, and each choice may result in a different outcome. What do you do?",
+        options: [
+        { text: "Attempt to stabilize the core and prevent the explosion.", outcome: "ending-A" },
+        { text: "Evacuate the facility with Alex, leaving KAYA behind.", outcome: "ending-B" },
+        { text: "Ask KAYA to sacrifice themselves to contain the explosion.", outcome: "ending-C" },
+        { text: "Transmit a distress signal and wait for rescue.", outcome: "ending-D" },
+        ],
+        },
+
+        {
+        question: "As the final seconds tick away, you make your decision, knowing that it will determine the fate of you, your team, and potentially the entire solar system. As you act on your choice, the facility around you starts to shake, and the energy weapon's core glows brighter.\n\nIn these final moments, you reflect on the journey that led you here and the choices you've made along the way. The outcome of your actions is about to be revealed. Are you ready to face the consequences of your decision?",
+        options: [
+        { text: "Yes, I'm ready to face the consequences.", outcome: "reveal-ending-A" },
+        { text: "No, I want to change my decision.", outcome: "reveal-ending-B" },
+        { text: "I'm unsure, but I must accept the outcome.", outcome: "reveal-ending-C" },
+        { text: "There's nothing more I can do.", outcome: "reveal-ending-D" },
+        ],
+        },
+
+      ];
+
+      var currentLevel = 0;
+
+      function updateScreen() {
+        var gameTextElement = document.getElementById("game-text");
+        var gameTextContent = data[currentLevel].question;
+        var buttons = document.querySelectorAll("#options button");
+
+        var i = 0,
+          isTag,
+          text;
+        (function type() {
+          text = gameTextContent.slice(0, ++i);
+          if (text === gameTextContent) {
+            setTimeout(function() {
+              // Show buttons after delay of 1 second
+              var buttons = document.querySelectorAll("#options button");
+              for (let i = 0; i < buttons.length; i++) {
+                buttons[i].style.display = "inline-block";
+              }
+            }, 1000);
+            return;
+          }
+          gameTextElement.innerHTML = text + `<span class='blinker'>&#32;</span>`;
+          var char = text.slice(-1);
+          if (char === "<") isTag = true;
+          if (char === ">") isTag = false;
+          if (isTag) return type();
+          setTimeout(type, 13);
+        })();
+
+        for (let i = 0; i < buttons.length; i++) {
+          buttons[i].innerText = data[currentLevel].options[i].text;
+          if (currentLevel === 0 && i > 1) {
+            buttons[i].style.display = "none";
+          } else {
+            buttons[i].style.display = "inline-block";
+          }
+        }
+      }
+
+      function chooseOption(optionIndex) {
+        const outcome = data[currentLevel].options[optionIndex].outcome;
+        if (outcome === "game-over") {
+          alert("Game Over");
+          currentLevel = 0;
+        } else if (outcome === "next-level") {
+          currentLevel += 1;
+        } else if(outcome === "help") {
+          alert("god help us")
+        }
+        updateScreen();
+      }
+
+      updateScreen();
+    </script>
+  </body>
+</html>
